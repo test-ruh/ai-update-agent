@@ -1,0 +1,25 @@
+version: 1
+name: main
+steps:
+  - id: data-writer
+    type: skill
+    skill: data-writer
+  - id: news-search
+    type: skill
+    skill: news-search
+  - id: digest-summarize
+    type: skill
+    skill: digest-summarize
+    depends_on: ["news-search"]
+  - id: persist-draft
+    type: skill
+    skill: results-store-write
+    depends_on: ["digest-summarize"]
+  - id: send-whatsapp
+    type: native-tool
+    tool: message
+    depends_on: ["persist-draft"]
+  - id: persist-delivery
+    type: skill
+    skill: results-store-write
+    depends_on: ["send-whatsapp"]

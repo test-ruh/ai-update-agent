@@ -1,0 +1,27 @@
+infrastructure:
+  - key: PG_CONNECTION_STRING
+    label: Postgres Connection String
+    required: true
+    secret: true
+  - key: ORG_ID
+    label: Org Id
+    required: true
+    secret: false
+  - key: AGENT_ID
+    label: Agent Id
+    required: true
+    secret: false
+  - key: RESULTS_DB_URL
+    label: PostgreSQL connection string
+    required: true
+    secret: true
+connector:
+  - key: SEARCH_API_KEY
+    label: Web/news search API key
+    required: true
+    secret: true
+  - key: LLM_API_KEY
+    label: LLM summarization API key
+    required: true
+    secret: true
+channel: []

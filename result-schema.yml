@@ -1,0 +1,122 @@
+version: "1.0"
+agent_id: "ai-update-agent"
+
+tables:
+  result_digest_runs:
+    description: One row per scheduled digest run.
+    writable: true
+    write_mode: upsert
+    columns:
+      id:
+        type: uuid
+        primary_key: true
+        auto_generate: true
+        description: Primary key for the run record.
+      scheduled_for:
+        type: datetime
+        required: true
+        description: Scheduled run time in UTC or normalized platform time.
+      started_at:
+        type: datetime
+        description: When the run actually began.
+      completed_at:
+        type: datetime
+        description: When processing finished.
+      status:
+        type: string
+        required: true
+        max_length: 32
+        description: "Run state such as pending, sent, failed, or partial."
+      item_count:
+        type: integer
+        required: true
+        description: Number of items included in the digest.
+      summary_text:
+        type: text
+        description: "Full WhatsApp-ready digest body."
+      delivery_status:
+        type: string
+        required: true
+        max_length: 32
+        description: Delivery outcome such as delivered or failed.
+      delivery_message_id:
+        type: string
+        max_length: 128
+        description: "Optional message identifier returned by the channel, if available."
+      error_message:
+        type: text
+        description: Short failure explanation if the run fails.
+      created_at:
+        type: datetime
+        required: true
+        auto_generate: true
+        description: Record creation time.
+      updated_at:
+        type: datetime
+        required: true
+        auto_generate: true
+        description: Last update time.
+    conflict_columns:
+      - scheduled_for
+    indexes:
+      - columns: [scheduled_for]
+        name: idx_result_digest_runs_scheduled_for
+      - columns: [status]
+        name: idx_result_digest_runs_status
+  result_digest_items:
+    description: One row per selected article in the digest.
+    writable: true
+    write_mode: upsert
+    columns:
+      id:
+        type: uuid
+        primary_key: true
+        auto_generate: true
+        description: Primary key for the selected item.
+      run_id:
+        type: uuid
+        required: true
+        description: Links the item to a digest run.
+      rank:
+        type: integer
+        required: true
+        description: "Position in the digest, 1 through 10."
+      headline:
+        type: string
+        required: true
+        max_length: 300
+        description: Short title used in the digest.
+      source_name:
+        type: string
+        required: true
+        max_length: 120
+        description: Outlet or source label.
+      source_url:
+        type: string
+        required: true
+        max_length: 2048
+        description: Canonical article or source link.
+      published_at:
+        type: datetime
+        description: Publication timestamp if available.
+      summary:
+        type: text
+        required: true
+        description: "One- or two-sentence summary for WhatsApp."
+      topic:
+        type: string
+        max_length: 80
+        description: "Lightweight classification such as politics, economy, or sports."
+      created_at:
+        type: datetime
+        required: true
+        auto_generate: true
+        description: Record creation time.
+    conflict_columns:
+      - run_id
+      - source_url
+    indexes:
+      - columns: [run_id, rank]
+        name: idx_result_digest_items_run_rank
+      - columns: [source_url]
+        name: idx_result_digest_items_source_url

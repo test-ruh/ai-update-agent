@@ -1,0 +1,16 @@
+{
+  "name": "daily-india-news",
+  "enabled": true,
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 6 * * *",
+    "tz": "Asia/Kolkata"
+  },
+  "sessionTarget": "main",
+  "wakeMode": "scheduled",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Generate the morning top-10 India news digest for WhatsApp.",
+    "timeoutSeconds": 600
+  }
+}

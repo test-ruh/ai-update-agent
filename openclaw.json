@@ -1,0 +1,40 @@
+{
+  "name": "ai-update-agent",
+  "version": "1.0.0",
+  "description": "Daily India news digest agent that sends a top-10 morning summary to a WhatsApp group at 6:00 AM IST.",
+  "agent_metadata": {
+    "agent_name": "ai-update-agent",
+    "agent_id": "ai-update-agent",
+    "avatar": "📰",
+    "tone": "concise, factual, helpful",
+    "domain": "news digest / market and public affairs briefing",
+    "primary_users": "WhatsApp group members who want a daily India news briefing",
+    "automation_type": "scheduled_report",
+    "schedule_description": "Every day at 6:00 AM IST, summarize the prior 24 hours of India news and post it to WhatsApp.",
+    "cron_expression": "0 6 * * *"
+  },
+  "skills": [
+    "data-writer",
+    "result-query",
+    "github-action",
+    "news-search",
+    "digest-summarize",
+    "results-store-write"
+  ],
+  "workflows": {
+    "main": "workflows/main.yaml"
+  },
+  "cron": {
+    "daily-india-news": "cron/daily-india-news.json"
+  },
+  "env": {
+    "required": [
+      "PG_CONNECTION_STRING",
+      "ORG_ID",
+      "AGENT_ID",
+      "RESULTS_DB_URL",
+      "SEARCH_API_KEY",
+      "LLM_API_KEY"
+    ]
+  }
+}
